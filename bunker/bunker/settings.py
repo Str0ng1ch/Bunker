@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import configparser
+
+config = configparser.ConfigParser()
+config.read('../config.ini')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-btzf6ug@&9*$injek)=yrwq9)$6c^orxo0smhbqm9!_5pnnd2k'
+SECRET_KEY = config.get("SECRETS", "SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -74,12 +78,12 @@ WSGI_APPLICATION = 'bunker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bunker',
-        'USER': 'root',
-        'PASSWORD': 'My$QLP@ssw0rd',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': config.get("DATABASE", "ENGINE"),
+        'NAME': config.get("DATABASE", "NAME"),
+        'USER': config.get("DATABASE", "USER"),
+        'PASSWORD': config.get("DATABASE", "PASSWORD"),
+        'HOST': config.get("DATABASE", "HOST"),
+        'PORT': config.get("DATABASE", "PORT"),
     }
 }
 
