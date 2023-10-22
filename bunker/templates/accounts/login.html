@@ -1,0 +1,14 @@
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="username" placeholder="Username...">
+    <br>
+    <input type="password" name="password" placeholder="Password...">
+    <br>
+
+    <button type="submit">Login</button>
+
+    <div>
+        Don't have an account? <a href="/register"> Register </a>
+    </div>
+</form>
