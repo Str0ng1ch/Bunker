@@ -14,14 +14,15 @@
 <body>
 
 {% if user.is_authenticated %}
-<span>Hello, {{ user.username }}</span>
-<span><a href="/logout">Logout</a></span>
+    <span>Hello, {{ user.username }}</span>
+    <span><a href="/generate_version">Составить вариант</a></span>
+    <span><a href="/logout">Logout</a></span>
 {% else %}
-<span>You are not logged in</span>
-<span><a href="/login">Login</a></span>
-<br>
-<span>Don't have an account?</span>
-<span><a href="/register">Register</a></span>
+    <span>You are not logged in</span>
+    <span><a href="/login">Login</a></span>
+    <br>
+    <span>Don't have an account?</span>
+    <span><a href="/register">Register</a></span>
 {% endif %}
 
 </body>

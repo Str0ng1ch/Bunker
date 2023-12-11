@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+</head>
+<body>
+    <h1>Results</h1>
+    <ul>
+        {% for result in results %}
+            <li>
+                Your Answer: {{ result.0 }}, Correct Answer: {{ result.1 }},
+                {% if result.2 %}
+                    Correct!
+                {% else %}
+                    Incorrect.
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/">Back to Home</a>
+</body>
+</html>

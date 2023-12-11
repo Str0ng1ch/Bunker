@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/created_version/" method="post">
+    {% csrf_token %}
+    <div id="counterContainer"></div>
+
+    <button type="submit">Create</button>
+</form>
+</body>
+<script>
+    function increment(id) {
+        let element = document.getElementById(id);
+        element.value = parseInt(element.value) + 1;
+    }
+
+    function decrement(id) {
+        let element = document.getElementById(id);
+        element.value = Math.max(parseInt(element.value) - 1, 0);
+    }
+
+    const counters = [
+        {label: 'Планиметрия', id: 'planimetria'},
+        {label: 'Векторы', id: 'vectors'},
+        {label: 'Стереометрия', id: 'stereometry'}
+    ];
+
+    function createCounter(label, id) {
+        return `
+            <div>
+                <label>${label}: </label>
+                <button type="button" onclick="decrement('${id}')">-</button>
+                <input type="text" name="${id}" id="${id}" value="0" readonly>
+                <button type="button" onclick="increment('${id}')">+</button>
+            </div>
+        `;
+    }
+
+    function increment(id) {
+        let element = document.getElementById(id);
+        element.value = parseInt(element.value) + 1;
+    }
+
+    function decrement(id) {
+        let element = document.getElementById(id);
+        element.value = Math.max(parseInt(element.value) - 1, 0);
+    }
+
+    const container = document.getElementById('counterContainer');
+    counters.forEach(counter => {
+        container.innerHTML += createCounter(counter.label, counter.id);
+    });
+</script>
+</html>
