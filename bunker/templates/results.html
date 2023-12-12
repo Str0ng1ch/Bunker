@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Results</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Результаты{% endblock %}
+
+{% block content %}
     <h1>Results</h1>
     <ul>
         {% for result in results %}
@@ -18,5 +17,4 @@
         {% endfor %}
     </ul>
     <a href="/">Back to Home</a>
-</body>
-</html>
+{% endblock %}

@@ -1,14 +1,30 @@
-<form method="post">
-    {% csrf_token %}
+{% extends 'base.html' %}
 
-    <input type="text" name="username" placeholder="Username...">
-    <br>
-    <input type="password" name="password" placeholder="Password...">
-    <br>
+{% block title %}Логин{% endblock %}
 
-    <button type="submit">Login</button>
-
-    <div>
-        Don't have an account? <a href="/register"> Register </a>
-    </div>
-</form>
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="main-container">
+            <div class="login-container">
+                <h2 class="text-center mb-4">Авторизация</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="login" class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-control" id="login" name="username"
+                               placeholder="Введите имя пользователя">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="Введите пароль">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Войти</button>
+                </form>
+                <div class="text-center mt-3">
+                    <p>Нет аккаунта? <a href="/register">Зарегистрироваться</a></p>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

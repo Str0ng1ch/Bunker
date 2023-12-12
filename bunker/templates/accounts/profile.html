@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Составленный вариант{% endblock %}
+
+{% block content %}
+    <h1>User Profile</h1>
+
+    <p>Correct Answers: {{ user_profile.correct }}</p>
+    <p>Incorrect Answers: {{ user_profile.incorrect }}</p>
+{% endblock %}

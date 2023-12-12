@@ -1,24 +1,41 @@
-<h1>Register</h1>
-<form method="POST" action="">
-    {% csrf_token %}
+{% extends 'base.html' %}
 
-    {{ form.username.label }}
-    {{ form.username }}
-    <br>
-    {{ form.email.label }}
-    {{ form.email }}
-    <br>
-    {{ form.password1.label }}
-    {{ form.password1 }}
-    <br>
-    {{ form.password2.label }}
-    {{ form.password2 }}
-    <br>
-    <input type="submit" name="Create User">
+{% block title %}Регистрация{% endblock %}
 
-    {{ form.errors }}
-    <br>
-    <div>
-        Already have an account? <a href="/login"> Login </a>
-    </div>
-</form>
+{% block content %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="main-container">
+            <div class="login-container">
+                <h2 class="text-center mb-4">Регистрация</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="login" class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-control" id="login" name="username"
+                               placeholder="Введите имя пользователя">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Адрес электронной почты</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               placeholder="Введите email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password1" name="password1"
+                               placeholder="Введите пароль">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Подтверждение пароля</label>
+                        <input type="password" class="form-control" id="password2" name="password2"
+                               placeholder="Введите пароль">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+                </form>
+                <div class="text-center mt-3">
+                    <p>Уже есть аккаунт? <a href="/login">Войти</a></p>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
