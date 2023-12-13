@@ -1,9 +1,15 @@
+import matplotlib.pyplot as plt
+import random
+import string
+
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .forms import CreateUserForm
 from .models import Profile
+
+from .all_tasks import task_1
 
 
 def index(request):
@@ -15,10 +21,18 @@ def generate_version(request):
 
 
 def profile(request):
-    user_profile = Profile.objects.get(user_id=request.user.id)
+    user_profile, created = Profile.objects.get_or_create(user=request.user, defaults={'correct': 0, 'incorrect': 0})
+
+    data_list = [1, 2, 3]
+    fig, ax = plt.subplots()
+    ax.bar(range(len(data_list)), data_list)
+    plot_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+    fig.savefig(f'bunker_game/static/images/{plot_name}.png')
+
     context = {
         'user_profile': user_profile,
-        'active_tab': 'profile'
+        'active_tab': 'profile',
+        'image_base64': f"{plot_name}.png"
     }
     return render(request, 'accounts/profile.html', context)
 
@@ -32,7 +46,6 @@ def register_page(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            Profile.objects.get_or_create(user_id=request.user.id, defaults={'correct': 0, 'incorrect': 0})
             return redirect('login')
 
     context = {'form': form, 'active_tab': 'register'}
@@ -77,16 +90,19 @@ def created_version(request):
         fields = ['planimetria', 'vectors', 'stereometry']
         needed_tasks = {field: request.POST.get(field) for field in fields}
 
-        tasks = create_tasks(needed_tasks)
+        # tasks = create_tasks(needed_tasks)
+        tasks = [['Площадь треугольника ABC равна 176, DE — средняя линия. Найдите площадь треугольника CDE', 44,
+                  'test.svg']]
 
-        return render(request, 'created_version.html', {'tasks': tasks})
+        return render(request, 'created_version.html', {'tasks': task_1})
     else:
         return HttpResponse("Invalid request")
 
 
 def check_results(request):
     if request.method == 'POST':
-        user_profile = Profile.objects.get(user_id=request.user.id)
+        user_profile, created = Profile.objects.get_or_create(user=request.user,
+                                                              defaults={'correct': 0, 'incorrect': 0})
         results, correct, incorrect = [], 0, 0
 
         for key, value in request.POST.items():

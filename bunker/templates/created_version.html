@@ -11,7 +11,13 @@
             <ol>
                 {% for task in tasks %}
                     <li>
-                        <strong>Condition:</strong> {{ task.0 }}<br>
+                        <strong>Condition:</strong> <br>
+                        <p style="display: block;"> {{ task.0 }}
+                            {% if task.2 %}
+                                <img src="../static/images/{{ task.2 }}" alt="task_image" style="vertical-align: top">
+                            {% endif %}
+                        </p>
+                        <br>
                         <input type="text" name="answer_{{ forloop.counter }}" placeholder="Your answer">
                         <input type="hidden" name="correct_answer_{{ forloop.counter }}" value="{{ task.1 }}">
                     </li>
