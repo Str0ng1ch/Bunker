@@ -5,9 +5,26 @@
 {% block content %}
     <form action="/created_version/" method="post">
         {% csrf_token %}
-        <div id="counterContainer"></div>
-
-        <button type="submit">Create</button>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 mb-4" style="text-align: center">
+                    <div class="generate-container">
+                        <h2>Составление полного <br> варианта</h2>
+                        <hr>
+                        <div id="fullCounterContainer"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4" style="text-align: center">
+                    <div class="generate-container">
+                        <h2>Составление собственного варианта</h2>
+                        <hr>
+                        <div id="counterContainer"></div>
+                        <div style="height: 10px"></div>
+                        <button type="submit">Создать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 {% endblock %}
 
@@ -24,23 +41,42 @@
         }
 
         const counters = [
-            {label: 'Планиметрия', id: 'planimetria'},
-            {label: 'Векторы', id: 'vectors'},
-            {label: 'Стереометрия', id: 'stereometry'}
+            {label: '1. Планиметрия', id: 'planimetria'},
+            {label: '2. Векторы', id: 'vectors'},
+            {label: '3. Стереометрия', id: 'stereometry'},
+            {label: '4. Начала теории вероятностей', id: 'probability_beginnings'},
+            {label: '5. Вероятности сложных событий', id: 'complex_events_probability'},
+            {label: '6. Простейшие уравнения', id: 'simple_equations'},
+            {label: '7. Вычисления и преобразования', id: 'calculations_transformations'},
+            {label: '8. Производная и первообразная', id: 'derivative_integral'},
+            {label: '9. Задачи с прикладным содержанием', id: 'applied_problems'},
+            {label: '10. Текстовые задачи', id: 'word_problems'},
+            {label: '11. Графики функций', id: 'function_graphs'},
+            {label: '12. Наибольшее и наименьшее значение функций', id: 'extrema_functions'}
         ];
 
         function createCounter(label, id) {
             return `
-            <div>
-                <label>${label}: </label>
+            <div style="display: flex; align-items: center; vertical-align: center">
                 <button type="button" onclick="decrement('${id}')">-</button>
-                <input type="text" name="${id}" id="${id}" value="0" readonly>
+                <input type="text" name="${id}" id="${id}" value="0" readonly style="max-width: 40px; text-align: center; margin: 0 5px">
                 <button type="button" onclick="increment('${id}')">+</button>
+                <label style="margin-right: auto; margin-left: 10px">${label}: </label>
+            </div>
+        `;
+        }
+
+        function createCounterFull(label, id) {
+            return `
+            <div style="display: flex; align-items: center; vertical-align: center">
+                <input type="text" name="${id}" id="${id}" value="1" readonly style="max-width: 40px; text-align: center; margin: 0 5px">
+                <label style="margin-right: auto; margin-left: 10px">${label}: </label>
             </div>
         `;
         }
 
         const container = document.getElementById('counterContainer');
+        const full_container = document.getElementById('fullCounterContainer');
         counters.forEach(counter => {
             container.innerHTML += createCounter(counter.label, counter.id);
         });

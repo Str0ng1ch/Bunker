@@ -1,15 +1,17 @@
-import matplotlib.pyplot as plt
 import random
 import string
 
+import matplotlib
+import matplotlib.pyplot as plt
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .forms import CreateUserForm
-from .models import Profile
+from .models import Attempt
+from .tasks import tasks, themes
 
-from .all_tasks import task_1
+matplotlib.use('Agg')
 
 
 def index(request):
@@ -17,22 +19,47 @@ def index(request):
 
 
 def generate_version(request):
+    request.session['form_key'] = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+    request.session[f'form_{request.session["form_key"]}_submitted'] = 0
+
     return render(request, 'generate_version.html', {'active_tab': 'generate'})
 
 
-def profile(request):
-    user_profile, created = Profile.objects.get_or_create(user=request.user, defaults={'correct': 0, 'incorrect': 0})
+def get_attempts_data(attempts):
+    data, all_correct, all_incorrect = [], 0, 0
 
-    data_list = [1, 2, 3]
-    fig, ax = plt.subplots()
-    ax.bar(range(len(data_list)), data_list)
+    for attempt in attempts:
+        all_correct += attempt.correct
+        all_incorrect += attempt.incorrect
+        data.append(attempt.correct / (attempt.correct + attempt.incorrect))
+
+    return data, all_correct, all_incorrect
+
+
+def make_profile_graph(data):
     plot_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
-    fig.savefig(f'bunker_game/static/images/{plot_name}.png')
+
+    plt.bar(range(len(data)), data, color='orange')
+    plt.xticks(range(len(data)), [f'Попытка {i + 1}' for i in range(len(data))])
+    plt.ylim(0, 1)
+
+    plt.savefig(f'bunker_game/static/images/{plot_name}.png')
+    plt.close()
+
+    return plot_name
+
+
+def profile(request):
+    attempts = Attempt.objects.filter(user=request.user)
+    data, correct, incorrect = get_attempts_data(attempts)
+
+    plot_name = make_profile_graph(data)
 
     context = {
-        'user_profile': user_profile,
         'active_tab': 'profile',
-        'image_base64': f"{plot_name}.png"
+        'graph': f"{plot_name}.png",
+        'correct': correct,
+        'incorrect': incorrect
     }
     return render(request, 'accounts/profile.html', context)
 
@@ -58,7 +85,6 @@ def login_page(request):
 
     if request.method == "POST":
         username, password = request.POST.get('username'), request.POST.get('password')
-
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -76,35 +102,33 @@ def logout_user(request):
 
 
 def create_tasks(needed_tasks):
-    tasks = []
+    ready_tasks = []
 
     for key, value in needed_tasks.items():
         for i in range(int(value)):
-            tasks.append([f"Условие для {key}_{i}", i])
+            ready_tasks.extend(random.sample(tasks[key], int(value)))
 
-    return tasks
+    return ready_tasks
 
 
 def created_version(request):
     if request.method == 'POST':
-        fields = ['planimetria', 'vectors', 'stereometry']
-        needed_tasks = {field: request.POST.get(field) for field in fields}
+        needed_tasks = {theme: request.POST.get(theme) for theme in themes}
 
-        # tasks = create_tasks(needed_tasks)
-        tasks = [['Площадь треугольника ABC равна 176, DE — средняя линия. Найдите площадь треугольника CDE', 44,
-                  'test.svg']]
+        ready_tasks = create_tasks(needed_tasks)
 
-        return render(request, 'created_version.html', {'tasks': task_1})
+        return render(request, 'created_version.html', {'tasks': ready_tasks})
     else:
         return HttpResponse("Invalid request")
 
 
 def check_results(request):
     if request.method == 'POST':
-        user_profile, created = Profile.objects.get_or_create(user=request.user,
-                                                              defaults={'correct': 0, 'incorrect': 0})
-        results, correct, incorrect = [], 0, 0
+        if request.session[f'form_{request.session["form_key"]}_submitted'] == 1:
+            print('here1')
+        request.session[f'form_{request.session["form_key"]}_submitted'] = 1
 
+        results, correct, incorrect = [], 0, 0
         for key, value in request.POST.items():
             if key.startswith('answer_'):
                 task_number = key.split('_')[-1]
@@ -114,9 +138,8 @@ def check_results(request):
                 incorrect += user_answer != correct_answer
                 results.append((user_answer, correct_answer, user_answer == correct_answer))
 
-        user_profile.correct += correct
-        user_profile.incorrect += incorrect
-        user_profile.save()
+        attempt = Attempt.objects.create(user=request.user, correct=correct, incorrect=incorrect)
+        attempt.save()
 
         return render(request, 'results.html', {'results': results})
     else:

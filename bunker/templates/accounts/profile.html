@@ -3,9 +3,20 @@
 {% block title %}Составленный вариант{% endblock %}
 
 {% block content %}
-    <h1>User Profile</h1>
-
-    <p>Correct Answers: {{ user_profile.correct }}</p>
-    <p>Incorrect Answers: {{ user_profile.incorrect }}</p>
-    <img src="../static/images/{{ image_base64 }}" alt="My Plot">
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-username">{{ user.username }}</div>
+            <img src="../static/images/{{ graph }}" alt="User Photo" class="profile-img">
+        </div>
+        <div class="profile-stats">
+            <div class="profile-stat">
+                <h4>Правильных ответов</h4>
+                <p id="correct-answers">{{ correct }}</p>
+            </div>
+            <div class="profile-stat">
+                <h4>Неправильных ответов</h4>
+                <p id="incorrect-answers">{{ incorrect }}</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
