@@ -11,16 +11,18 @@
                     <div class="generate-container">
                         <h2>Составление полного <br> варианта</h2>
                         <hr>
-                        <div id="fullCounterContainer"></div>
+                        <div id="FullCounterContainer"></div>
+                        <div style="height: 10px"></div>
+                        <button type="submit" class="button" name="create_full_version">Создать</button>
                     </div>
                 </div>
                 <div class="col-md-6 mb-4" style="text-align: center">
                     <div class="generate-container">
                         <h2>Составление собственного варианта</h2>
                         <hr>
-                        <div id="counterContainer"></div>
+                        <div id="CustomCounterContainer"></div>
                         <div style="height: 10px"></div>
-                        <button type="submit">Создать</button>
+                        <button type="submit" class="button" name="create_custom_version">Создать</button>
                     </div>
                 </div>
             </div>
@@ -55,30 +57,22 @@
             {label: '12. Наибольшее и наименьшее значение функций', id: 'extrema_functions'}
         ];
 
-        function createCounter(label, id) {
+        function createCounter(label, id, value = 0, display = 'block') {
             return `
-            <div style="display: flex; align-items: center; vertical-align: center">
-                <button type="button" onclick="decrement('${id}')">-</button>
-                <input type="text" name="${id}" id="${id}" value="0" readonly style="max-width: 40px; text-align: center; margin: 0 5px">
-                <button type="button" onclick="increment('${id}')">+</button>
-                <label style="margin-right: auto; margin-left: 10px">${label}: </label>
+            <div style="display: flex; align-items: center; vertical-align: center; margin: 5px 0">
+                <button type="button" onclick="decrement('${id}')" class="edit_number_button" style="display: ${display}">-</button>
+                <input type="text" name="${id}" id="${id}" value="${value}" class="number_of_tasks" readonly">
+                <button type="button" onclick="increment('${id}')" class="edit_number_button" style="display: ${display}" ">+</button>
+                <label style="margin-right: auto; margin-left: 10px; margin-bottom: 0">${label}: </label>
             </div>
         `;
         }
 
-        function createCounterFull(label, id) {
-            return `
-            <div style="display: flex; align-items: center; vertical-align: center">
-                <input type="text" name="${id}" id="${id}" value="1" readonly style="max-width: 40px; text-align: center; margin: 0 5px">
-                <label style="margin-right: auto; margin-left: 10px">${label}: </label>
-            </div>
-        `;
-        }
-
-        const container = document.getElementById('counterContainer');
-        const full_container = document.getElementById('fullCounterContainer');
+        const container = document.getElementById('CustomCounterContainer');
+        const full_container = document.getElementById('FullCounterContainer');
         counters.forEach(counter => {
-            container.innerHTML += createCounter(counter.label, counter.id);
+            container.innerHTML += createCounter(counter.label, counter.id, 0);
+            full_container.innerHTML += createCounter(counter.label, counter.id + counters.length, 1, 'none');
         });
     </script>
 {% endblock %}

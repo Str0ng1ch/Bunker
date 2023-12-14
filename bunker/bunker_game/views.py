@@ -101,12 +101,12 @@ def logout_user(request):
     return redirect('login')
 
 
-def create_tasks(needed_tasks):
+def create_tasks(needed_tasks, tasks_type):
     ready_tasks = []
 
     for key, value in needed_tasks.items():
-        for i in range(int(value)):
-            ready_tasks.extend(random.sample(tasks[key], int(value)))
+        for i in range(1 if tasks_type else int(value)):
+            ready_tasks.extend(random.sample(tasks[key], 1 if tasks_type else int(value)))
 
     return ready_tasks
 
@@ -114,8 +114,9 @@ def create_tasks(needed_tasks):
 def created_version(request):
     if request.method == 'POST':
         needed_tasks = {theme: request.POST.get(theme) for theme in themes}
+        tasks_type = True if 'create_full_version' in request.POST else False
 
-        ready_tasks = create_tasks(needed_tasks)
+        ready_tasks = create_tasks(needed_tasks, tasks_type)
 
         return render(request, 'created_version.html', {'tasks': ready_tasks})
     else:
@@ -138,8 +139,9 @@ def check_results(request):
                 incorrect += user_answer != correct_answer
                 results.append((user_answer, correct_answer, user_answer == correct_answer))
 
-        attempt = Attempt.objects.create(user=request.user, correct=correct, incorrect=incorrect)
-        attempt.save()
+        if request.user.is_authenticated:
+            attempt = Attempt.objects.create(user=request.user, correct=correct, incorrect=incorrect)
+            attempt.save()
 
         return render(request, 'results.html', {'results': results})
     else:
