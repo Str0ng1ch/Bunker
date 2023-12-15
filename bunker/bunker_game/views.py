@@ -102,11 +102,11 @@ def logout_user(request):
 
 
 def create_tasks(needed_tasks, tasks_type):
-    ready_tasks = []
+    ready_tasks, count = [], 0
+    print(needed_tasks)
 
     for key, value in needed_tasks.items():
-        for i in range(1 if tasks_type else int(value)):
-            ready_tasks.extend(random.sample(tasks[key], 1 if tasks_type else int(value)))
+        ready_tasks.extend(random.sample(tasks[key], 1 if tasks_type else int(value)))
 
     return ready_tasks
 
@@ -117,7 +117,7 @@ def created_version(request):
         tasks_type = True if 'create_full_version' in request.POST else False
 
         ready_tasks = create_tasks(needed_tasks, tasks_type)
-
+        print(ready_tasks)
         return render(request, 'created_version.html', {'tasks': ready_tasks})
     else:
         return HttpResponse("Invalid request")
