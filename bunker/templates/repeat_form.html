@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Ошибка{% endblock %}
+
+{% block content %}
+    <div class="generate-container" style="max-width: 550px">
+        <h1>Повторное прохождение тестирования!</h1>
+        <hr>
+        <p>Для честности, нельзя проходить одно и то же тестирование более 1-ого раза. Но вы можете продолжить
+            подготовку на новом тестировании!</p>
+        <br>
+        <a href="/generate_version" class="btn btn-primary button" style="width: 150px; height: 60px">
+            <p style="margin: 5px 0 0;">Сгенерировать новый вариант</p>
+        </a>
+    </div>
+{% endblock %}

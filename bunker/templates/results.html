@@ -3,18 +3,16 @@
 {% block title %}Результаты{% endblock %}
 
 {% block content %}
-    <h1>Results</h1>
-    <ul>
+    <div class="generate-container" style="max-width: 550px">
+        <h1>Результаты</h1>
+        <hr>
         {% for result in results %}
-            <li>
-                Your Answer: {{ result.0 }}, Correct Answer: {{ result.1 }},
-                {% if result.2 %}
-                    Correct!
-                {% else %}
-                    Incorrect.
-                {% endif %}
-            </li>
+            <p class="{% if not result.2 %}in{% endif %}correct"> Задание №{{ forloop.counter }}: Ваш
+                ответ: {{ result.0 }}, правильный ответ: {{ result.1 }} </p>
         {% endfor %}
-    </ul>
-    <a href="/">Back to Home</a>
+        <br>
+        <a href="/generate_version" class="btn btn-primary button" style="width: 150px; height: 60px">
+            <p style="margin: 5px 0 0;">Сгенерировать новый вариант</p>
+        </a>
+    </div>
 {% endblock %}

@@ -26,6 +26,9 @@
             <li class="nav-item {% if active_tab == 'generate' %}active{% endif %}">
                 <a class="nav-link" href="/generate_version">Составить вариант</a>
             </li>
+            <li class="nav-item {% if active_tab == 'reference_materials' %}active{% endif %}">
+                <a class="nav-link" href="/reference_materials">Справочные материалы</a>
+            </li>
             {% if user.is_authenticated %}
                 <li class="nav-item {% if active_tab == 'profile' %}active{% endif %}">
                     <a class="nav-link" href="/profile">Профиль</a>
@@ -44,7 +47,7 @@
 </nav>
 
 <!-- Основной контент -->
-<div class="container mt-4">
+<div class="container mt-4" style="text-align: center">
     {% block content %}{% endblock %}
 </div>
 

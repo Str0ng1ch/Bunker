@@ -18,10 +18,15 @@ def index(request):
     return render(request, 'index.html', {'active_tab': 'home'})
 
 
-def generate_version(request):
-    request.session['form_key'] = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
-    request.session[f'form_{request.session["form_key"]}_submitted'] = 0
+def repeat_form(request):
+    return render(request, 'repeat_form.html')
 
+
+def reference_materials(request):
+    return render(request, 'reference_materials.html', {'active_tab': 'reference_materials'})
+
+
+def generate_version(request):
     return render(request, 'generate_version.html', {'active_tab': 'generate'})
 
 
@@ -103,21 +108,23 @@ def logout_user(request):
 
 def create_tasks(needed_tasks, tasks_type):
     ready_tasks, count = [], 0
-    print(needed_tasks)
 
     for key, value in needed_tasks.items():
-        ready_tasks.extend(random.sample(tasks[key], 1 if tasks_type else int(value)))
-
+        if tasks_type or int(value) > 0:
+            ready_tasks.extend(random.sample(tasks[key], 1 if tasks_type else int(value)))
     return ready_tasks
 
 
 def created_version(request):
     if request.method == 'POST':
+        request.session['form_key'] = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+        request.session[f'form_{request.session["form_key"]}_submitted'] = 0
+
         needed_tasks = {theme: request.POST.get(theme) for theme in themes}
         tasks_type = True if 'create_full_version' in request.POST else False
 
         ready_tasks = create_tasks(needed_tasks, tasks_type)
-        print(ready_tasks)
+
         return render(request, 'created_version.html', {'tasks': ready_tasks})
     else:
         return HttpResponse("Invalid request")
@@ -126,7 +133,7 @@ def created_version(request):
 def check_results(request):
     if request.method == 'POST':
         if request.session[f'form_{request.session["form_key"]}_submitted'] == 1:
-            print('here1')
+            return redirect('repeat_form')
         request.session[f'form_{request.session["form_key"]}_submitted'] = 1
 
         results, correct, incorrect = [], 0, 0
@@ -146,3 +153,6 @@ def check_results(request):
         return render(request, 'results.html', {'results': results})
     else:
         return HttpResponse("Invalid request")
+
+# TODO решение с решу егэ
+# TODO дизайн главной

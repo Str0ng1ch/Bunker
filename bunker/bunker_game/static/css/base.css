@@ -107,3 +107,11 @@
     background-color: orange;
     border: 3px orange;
 }
+
+.correct {
+    color: lightgreen;
+}
+
+.incorrect {
+    color: red;
+}

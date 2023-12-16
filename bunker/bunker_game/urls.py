@@ -10,4 +10,6 @@ urlpatterns = [
     path('created_version/', views.created_version, name='created_version'),
     path('generate_version/', views.generate_version, name='generate_version'),
     path('check_results/', views.check_results, name='check_results'),
+    path('repeat_from/', views.repeat_form, name='repeat_form'),
+    path('reference_materials/', views.reference_materials, name='reference_materials'),
 ]

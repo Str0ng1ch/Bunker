@@ -3,9 +3,32 @@
 {% block title %}Составленный вариант{% endblock %}
 
 {% block content %}
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Подтверждение действия</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите завершить тестирование? <br>
+                    После завершения текущей попытки Вы <b> не сможете </b> вернуться к ней.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary button" id="confirmButton" style="width: 130px;">
+                        Подтвердить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <h1>Task Details</h1>
-    <form action="/check_results/" method="post">
+    <h1>Сгенерированный вариант</h1> <br>
+    <form action="/check_results/" method="post" id="check_results">
         {% csrf_token %}
         {% if tasks %}
             <div class="container-fluid">
@@ -15,9 +38,8 @@
                         <div class="row">
                     {% endif %}
                 <div class="col-md-6 mb-4" style="text-align: center">
-                    <div class="task-container">
-                        <strong>Condition:</strong> <br>
-                        <p style="display: block;"> {{ task.0 }}
+                    <div class="task-container" style="text-align: left">
+                        <p style="display: block;"><b>Условие:</b> {{ task.0 }}
                             {% if task.2 %}
                                 <img src="../static/images/{{ task.2 }}" alt="task_image"
                                      style="vertical-align: top">
@@ -26,7 +48,7 @@
                         <br>
                         <label>
                             <input type="text" name="answer_{{ forloop.counter }}"
-                                   placeholder="Your answer">
+                                   placeholder="Ваш ответ:">
                         </label>
                         <input type="hidden" name="correct_answer_{{ forloop.counter }}"
                                value="{{ task.1 }}">
@@ -38,9 +60,23 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>No tasks available.</p>
+            <p>Нет доступных заданий</p>
         {% endif %}
-        <button type="submit">Check Everything</button>
+        <button type="button" class="btn btn-primary button" data-toggle="modal" data-target="#confirmModal"
+                style="width: 150px; height: 60px">
+            Завершить тестирование
+        </button>
     </form>
-    <a href="/">Back to Home</a>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#confirmButton').on('click', function () {
+                console.log('here')
+                $('#confirmModal').modal('hide');
+                $('#check_results').submit();
+            });
+        });
+    </script>
 {% endblock %}
