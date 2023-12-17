@@ -3,6 +3,8 @@ import string
 
 import matplotlib
 import matplotlib.pyplot as plt
+from PIL import Image
+
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -41,15 +43,25 @@ def get_attempts_data(attempts):
     return data, all_correct, all_incorrect
 
 
-def make_profile_graph(data):
+def crop_top_pixels(plot_name):
+    image = Image.open(f'bunker_game/static/images/{plot_name}.png')
+    width, height = image.size
+    cropped_image = image.crop((0, 50, width, height - 20))
+
+    cropped_image.save(f'bunker_game/static/images/{plot_name}.png')
+
+
+def make_profile_graph(data, length):
     plot_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
 
     plt.bar(range(len(data)), data, color='orange')
-    plt.xticks(range(len(data)), [f'Попытка {i + 1}' for i in range(len(data))])
+    plt.xticks(range(len(data)), [f'Попытка {i + length + 1}' for i in range(len(data))])
     plt.ylim(0, 1)
 
     plt.savefig(f'bunker_game/static/images/{plot_name}.png')
     plt.close()
+
+    crop_top_pixels(plot_name)
 
     return plot_name
 
@@ -58,7 +70,7 @@ def profile(request):
     attempts = Attempt.objects.filter(user=request.user)
     data, correct, incorrect = get_attempts_data(attempts)
 
-    plot_name = make_profile_graph(data)
+    plot_name = make_profile_graph(data[-5:], len(data))
 
     context = {
         'active_tab': 'profile',
@@ -124,6 +136,7 @@ def created_version(request):
         tasks_type = True if 'create_full_version' in request.POST else False
 
         ready_tasks = create_tasks(needed_tasks, tasks_type)
+        request.session['tasks'] = ready_tasks
 
         return render(request, 'created_version.html', {'tasks': ready_tasks})
     else:
@@ -133,7 +146,8 @@ def created_version(request):
 def check_results(request):
     if request.method == 'POST':
         if request.session[f'form_{request.session["form_key"]}_submitted'] == 1:
-            return redirect('repeat_form')
+            # return redirect('repeat_form')
+            pass
         request.session[f'form_{request.session["form_key"]}_submitted'] = 1
 
         results, correct, incorrect = [], 0, 0
@@ -150,9 +164,8 @@ def check_results(request):
             attempt = Attempt.objects.create(user=request.user, correct=correct, incorrect=incorrect)
             attempt.save()
 
-        return render(request, 'results.html', {'results': results})
+        return render(request, 'results.html', {'results': results, 'tasks': request.session['tasks']})
     else:
         return HttpResponse("Invalid request")
 
 # TODO решение с решу егэ
-# TODO дизайн главной

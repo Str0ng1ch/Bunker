@@ -10,9 +10,65 @@
             <p class="{% if not result.2 %}in{% endif %}correct"> Задание №{{ forloop.counter }}: Ваш
                 ответ: {{ result.0 }}, правильный ответ: {{ result.1 }} </p>
         {% endfor %}
-        <br>
+        <hr>
         <a href="/generate_version" class="btn btn-primary button" style="width: 150px; height: 60px">
-            <p style="margin: 5px 0 0;">Сгенерировать новый вариант</p>
+            <p style="margin: 5px 0 0; color: black">Сгенерировать новый вариант</p>
         </a>
     </div>
+
+    <br>
+    <h1>Подробный разбор</h1>
+    <br>
+
+    {% if tasks %}
+        <div class="container-fluid">
+            {% for task in tasks %}
+                {% cycle '0' '1' as row_number silent %}
+                {% if row_number == '0' %}
+                    <div class="row">
+                {% endif %}
+            <div class="col-md-6 mb-4" style="text-align: center">
+                <div class="task-container" style="text-align: left">
+                    <p style="display: block;"><b>Условие:</b> {{ task.0 }}
+                        {% if task.2 %}
+                            <img src="../static/images/{{ task.2 }}" alt="task_image"
+                                 style="vertical-align: top">
+                        {% endif %}
+                    </p>
+                    <br>
+                    <p>Правильный ответ: {{ task.1 }}</p>
+
+                    <br>
+                    <button type="button" onclick="toggleSolution({{ forloop.counter }})"
+                            id="solution_{{ forloop.counter }}_button">Показать решение
+                    </button>
+                    <div id="solution_{{ forloop.counter }}" style="display: none">
+                        <p>{{ task.3 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% if row_number != '0' %}
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Нет доступных заданий</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function toggleSolution(task_number) {
+            let div = document.getElementById("solution_" + task_number);
+            let button = document.getElementById("solution_" + task_number + "_button");
+            if (div.style.display === "none") {
+                div.style.display = "block";
+                button.textContent = "Скрыть решение"
+            } else {
+                div.style.display = "none";
+                button.textContent = "Показать решение"
+            }
+        }
+    </script>
 {% endblock %}

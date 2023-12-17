@@ -19,7 +19,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary button" id="confirmButton" style="width: 130px;">
+                    <button type="button" class="btn btn-primary button" id="confirmButton"
+                            style="width: 130px; color: black">
                         Подтвердить
                     </button>
                 </div>
@@ -63,7 +64,7 @@
             <p>Нет доступных заданий</p>
         {% endif %}
         <button type="button" class="btn btn-primary button" data-toggle="modal" data-target="#confirmModal"
-                style="width: 150px; height: 60px">
+                style="width: 150px; height: 60px; color: black">
             Завершить тестирование
         </button>
     </form>
@@ -73,7 +74,6 @@
     <script>
         $(document).ready(function () {
             $('#confirmButton').on('click', function () {
-                console.log('here')
                 $('#confirmModal').modal('hide');
                 $('#check_results').submit();
             });

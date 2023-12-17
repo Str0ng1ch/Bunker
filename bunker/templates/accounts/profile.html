@@ -6,16 +6,19 @@
     <div class="profile-container">
         <div class="profile-header">
             <div class="profile-username">{{ user.username }}</div>
+        </div>
+        <div>
+            <p style="margin-bottom: 0">Результаты последних 5 попыток</p>
             <img src="../static/images/{{ graph }}" alt="User Photo" class="profile-img">
         </div>
         <div class="profile-stats">
             <div class="profile-stat">
-                <h4>Правильных ответов</h4>
-                <p id="correct-answers">{{ correct }}</p>
+                <h5>Правильных ответов</h5>
+                <p style="font-size: 25px;">{{ correct }}</p>
             </div>
             <div class="profile-stat">
-                <h4>Неправильных ответов</h4>
-                <p id="incorrect-answers">{{ incorrect }}</p>
+                <h5>Неправильных ответов</h5>
+                <p style="font-size: 25px;">{{ incorrect }}</p>
             </div>
         </div>
     </div>
