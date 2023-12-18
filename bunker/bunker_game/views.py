@@ -55,7 +55,7 @@ def make_profile_graph(data, length):
     plot_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
 
     plt.bar(range(len(data)), data, color='orange')
-    plt.xticks(range(len(data)), [f'Попытка {i + length + 1}' for i in range(len(data))])
+    plt.xticks(range(len(data)), [f'Попытка {i + 1}' for i in range(len(data))])
     plt.ylim(0, 1)
 
     plt.savefig(f'bunker_game/static/images/{plot_name}.png')
