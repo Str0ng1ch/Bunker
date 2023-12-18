@@ -35,15 +35,18 @@
                                  style="vertical-align: top">
                         {% endif %}
                     </p>
-                    <br>
+
                     <p>Правильный ответ: {{ task.1 }}</p>
 
-                    <br>
-                    <button type="button" onclick="toggleSolution({{ forloop.counter }})"
+                    <button type="button" class="btn btn-primary button" style="color: black; width: 200px"
+                            onclick="toggleSolution({{ forloop.counter }})"
                             id="solution_{{ forloop.counter }}_button">Показать решение
                     </button>
+
                     <div id="solution_{{ forloop.counter }}" style="display: none">
-                        <p>{{ task.3 }}</p>
+                        <div id="latex-container" style="font-size: 13px">
+                            {{ task.3 }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,4 +74,10 @@
             }
         }
     </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+           tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+        });
+    </script>
+
 {% endblock %}

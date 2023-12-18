@@ -43,13 +43,13 @@
                         <p style="display: block;"><b>Условие:</b> {{ task.0 }}
                             {% if task.2 %}
                                 <img src="../static/images/{{ task.2 }}" alt="task_image"
-                                     style="vertical-align: top">
+                                     style="vertical-align: top; max-width: 450px">
                             {% endif %}
                         </p>
                         <br>
                         <label>
                             <input type="text" name="answer_{{ forloop.counter }}"
-                                   placeholder="Ваш ответ:">
+                                   placeholder="Ваш ответ: {{ task.1 }}">
                         </label>
                         <input type="hidden" name="correct_answer_{{ forloop.counter }}"
                                value="{{ task.1 }}">
@@ -64,7 +64,7 @@
             <p>Нет доступных заданий</p>
         {% endif %}
         <button type="button" class="btn btn-primary button" data-toggle="modal" data-target="#confirmModal"
-                style="width: 150px; height: 60px; color: black">
+                style="width: 150px; height: 60px; color: black; margin-bottom: 20px">
             Завершить тестирование
         </button>
     </form>

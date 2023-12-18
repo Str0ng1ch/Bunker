@@ -146,8 +146,7 @@ def created_version(request):
 def check_results(request):
     if request.method == 'POST':
         if request.session[f'form_{request.session["form_key"]}_submitted'] == 1:
-            # return redirect('repeat_form')
-            pass
+            return redirect('repeat_form')
         request.session[f'form_{request.session["form_key"]}_submitted'] = 1
 
         results, correct, incorrect = [], 0, 0
