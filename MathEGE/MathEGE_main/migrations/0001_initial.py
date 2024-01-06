@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nickname', models.CharField(max_length=50)),
-                ('room', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bunker_game.room')),
+                ('room', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MathEGE_main.room')),
             ],
         ),
     ]

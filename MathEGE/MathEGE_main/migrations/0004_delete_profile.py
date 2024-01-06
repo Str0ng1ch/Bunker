@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bunker_game', '0003_attempt'),
+        ('MathEGE_main', '0003_attempt'),
     ]
 
     operations = [

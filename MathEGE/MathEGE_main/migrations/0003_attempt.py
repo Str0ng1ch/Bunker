@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('bunker_game', '0002_profile_delete_card_remove_player_room_delete_user_and_more'),
+        ('MathEGE_main', '0002_profile_delete_card_remove_player_room_delete_user_and_more'),
     ]
 
     operations = [
