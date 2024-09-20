@@ -13,4 +13,8 @@ A university project in Django, aimed at studying the technology of this framewo
        |      Django     |     framework for web development      |   4.2.6   | pip install Django==4.2.6       |
        |   mysqlclient   |       Python interface to MySQL        |   2.2.0   | pip install mysqlclient = 2.2.0 |
 
-## 
+## Launch
+  1. `python MathEGE/manage.py runserver`
+
+## Usage
+  1. Go to localhost (`http://localhost/` or `http://127.0.0.1/`) and enjoy website.
